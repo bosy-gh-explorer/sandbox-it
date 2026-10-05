@@ -1,7 +1,7 @@
 ---
 title: "System Requirements Specification - RMG-100 Remote Monitoring Gateway"
 doc_id: SRS-RMG-100
-status: "Draft 0.9 - internal"
+status: "Draft 1.0 - external review"
 owner: Systems Engineering
 ---
 
@@ -55,9 +55,9 @@ The keywords **shall**, **should**, and **may** are used as defined in RFC 2119 
   - *Acceptance:* Verified by test T-CON-001. The gateway joins a WPA2 network and completes registration with FleetCloud.
 - **REQ-CON-002.** If both Wi-Fi and Ethernet are available, the gateway shall prefer Ethernet and shall establish a Wi-Fi session within 60 seconds of losing the Ethernet link.
   - *Acceptance:* Verified by test T-CON-002. Unplugging Ethernet results in an active Wi-Fi session within 60 s.
-- **REQ-CON-003.** The gateway shall establish a connection to FleetCloud within 30 seconds of power-up.
+- **REQ-CON-003.** The gateway shall establish a connection to FleetCloud within 15 seconds of power-up.
   - *Acceptance:* Verified by test T-CON-003. Median of 20 power-up cycles.
-- **REQ-CON-004.** While connected, the gateway shall send a heartbeat status message to FleetCloud every 60 seconds.
+- **REQ-CON-004.** While connected, the gateway shall send a heartbeat status message to FleetCloud every 30 seconds.
   - *Acceptance:* Verified by test T-CON-004. Interval measured over a 1-hour soak.
 
 ### 3.2 Telemetry and data retention
@@ -83,8 +83,6 @@ The keywords **shall**, **should**, and **may** are used as defined in RFC 2119 
 
 - **REQ-DAT-004.** After a disconnection, the gateway shall forward all retained telemetry to FleetCloud once connectivity is restored (store-and-forward).
   - *Acceptance:* Verified by test T-DAT-004. No gaps in FleetCloud data after a simulated 24-hour outage.
-- **REQ-DAT-005.** The gateway shall export retained telemetry to a USB mass-storage device in CSV format on operator request.
-  - *Acceptance:* Verified by demonstration D-DAT-005.
 
 ### 3.3 Alarms
 
@@ -103,6 +101,17 @@ The keywords **shall**, **should**, and **may** are used as defined in RFC 2119 
   - *Acceptance:* Verified by test T-API-002.
 - **REQ-API-003.** The API shall be versioned (`/v1`) and shall maintain backward compatibility within a major version.
   - *Acceptance:* Verified by inspection.
+- **REQ-API-004.** The on-device dashboard shall be intuitive and user-friendly.
+  - *Acceptance:* Verified by demonstration D-API-004.
+
+### 3.5 Over-the-air updates
+
+- **REQ-OTA-001.** The gateway must accept only firmware images signed with the vendor signing key.
+  - *Acceptance:* Verified by test T-OTA-001.
+- **REQ-OTA-002.** An OTA update shall complete without disrupting normal monitoring operation.
+  - *Acceptance:* TBD.
+- **REQ-OTA-003.** If an installed update fails validation at boot, the gateway shall roll back to the previous firmware image within five minutes.
+  - *Acceptance:* Verified by test T-OTA-003.
 
 ## 4. Non-functional requirements
 
@@ -114,7 +123,7 @@ The keywords **shall**, **should**, and **may** are used as defined in RFC 2119 
 
 ### 4.2 Security
 
-- **NFR-SEC-001.** All cloud connections shall use TLS 1.2 or higher.
+- **NFR-SEC-001.** All cloud connections shall use TLS 1.3.
 - **NFR-SEC-002.** Third-party integrations accessing the FleetCloud API shall be accepted with TLS 1.2 or higher.
 - **NFR-SEC-003.** The gateway shall pin the FleetCloud server certificate.
 - **NFR-SEC-004.** The gateway shall verify firmware image signatures before boot (secure boot).
@@ -135,6 +144,7 @@ The gateway shall tolerate the enviromental conditions below.
 | REQ-DAT-001 … 004 | Test |
 | REQ-ALM-001 … 003 | Test |
 | REQ-API-001 … 003 | Test and demonstration |
+| REQ-OTA-001 … 003 | Test |
 | NFR-PERF-001 … 003 | Test |
 | NFR-SEC-001 … 004 | Inspection and test |
 | NFR-REL-001 … 003 | Analysis |
@@ -158,14 +168,18 @@ The gateway shall tolerate the enviromental conditions below.
 | REQ-API-001 | AB#1341 | TP-API |
 | REQ-API-002 | AB#1342 | TP-API |
 | REQ-API-003 | AB#1343 | TP-API |
+| REQ-OTA-001 | AB#1401 | TP-OTA |
+| REQ-OTA-002 | AB#1402 | TP-OTA |
+| REQ-OTA-003 | AB#1403 | TP-OTA |
 
 ## 7. Open issues
 
 - [ ] Confirm default alarm thresholds with product management.
-- [ ] Decide whether USB CSV export remains a supported feature on hardware revision C.
+- [ ] Schedule external review round 1.
 
 ## 8. Revision history
 
 | Version | Date | Author | Notes |
 | --- | --- | --- | --- |
 | 0.9 | 2026-08-21 | Systems Engineering | Initial internal draft |
+| 1.0 | 2026-10-02 | Systems Engineering | Draft for external review: adds OTA requirements, tightens connection and heartbeat timing, removes USB CSV export |
