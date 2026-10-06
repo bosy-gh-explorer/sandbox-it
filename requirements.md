@@ -7,7 +7,7 @@ owner: Systems Engineering
 
 # System Requirements Specification — RMG-100 Remote Monitoring Gateway
 
-## 1. Introduction
+## 1. Introduction -- just to be clear
 
 ### 1.1 Purpose
 
